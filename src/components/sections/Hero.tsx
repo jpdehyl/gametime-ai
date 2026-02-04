@@ -1,132 +1,137 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-primary to-accent pt-20">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-            backgroundSize: "40px 40px",
-          }}
-        />
-      </div>
-
-      {/* Animated Gradient Orbs */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-secondary/30 rounded-full blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/30 rounded-full blur-3xl"
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.5, 0.3, 0.5],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      <Container className="relative z-10">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+    <section className="min-h-screen pt-20 border-b-[6px] border-black">
+      {/* Mondrian Grid Layout */}
+      <div className="h-[calc(100vh-80px)] grid grid-cols-12 grid-rows-6">
+        {/* Main headline - Large white block */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className="col-span-12 lg:col-span-8 row-span-4 bg-white border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black p-8 lg:p-12 flex flex-col justify-center"
+        >
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mondrian-subheading text-black/60 mb-4"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/90 text-sm font-medium backdrop-blur-sm border border-white/20">
-              <span className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
-              Now with AI-Powered Real-Time Coaching
-            </span>
-          </motion.div>
+            AI-Powered Sales Coaching
+          </motion.span>
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-8 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight"
-          >
-            The AI Layer That Makes
-            <span className="block text-secondary">Your Team Unstoppable</span>
-          </motion.h1>
+          <h1 className="mondrian-heading text-5xl sm:text-6xl lg:text-7xl xl:text-8xl text-black mb-8">
+            The AI Layer
+            <br />
+            That Makes
+            <br />
+            <span className="text-[#0000FF]">Your Team</span>
+            <br />
+            Work Better
+          </h1>
 
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 text-lg sm:text-xl text-white/80 max-w-2xl mx-auto"
-          >
-            Transform every sales call with AI-powered coaching, real-time
-            intelligence, and performance analytics. Close more deals, faster.
-          </motion.p>
+          <p className="text-lg lg:text-xl text-black/70 max-w-xl mb-10 font-medium">
+            Real-time coaching on every sales call. Your reps execute like your best closer. Every time.
+          </p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Button variant="secondary" size="lg">
-              Request a Demo
+          <div className="flex flex-wrap gap-4">
+            <Button variant="red" size="lg">
+              Get a Demo
               <ArrowRight className="ml-2 w-5 h-5" />
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-white/30 text-white hover:bg-white/10 hover:text-white"
-            >
-              <Play className="mr-2 w-5 h-5" />
-              Watch Video
+            <Button variant="white" size="lg">
+              Watch It Work
             </Button>
+          </div>
+        </motion.div>
+
+        {/* Right side color blocks */}
+        <div className="hidden lg:grid col-span-4 row-span-4 grid-rows-4">
+          {/* Blue block */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="row-span-2 bg-[#0000FF] border-b-[6px] border-black p-8 flex items-end mondrian-cell"
+          >
+            <div>
+              <div className="text-white/60 text-xs uppercase tracking-widest mb-1">Close Rate</div>
+              <div className="text-white text-5xl font-black">+40%</div>
+            </div>
           </motion.div>
 
-          {/* Stats */}
+          {/* Yellow block */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="row-span-1 bg-[#FFDE00] border-b-[6px] border-black p-6 flex items-center mondrian-cell"
           >
-            {[
-              { value: "40%", label: "Faster Close Rates" },
-              { value: "3x", label: "More Qualified Leads" },
-              { value: "500+", label: "Enterprise Clients" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl sm:text-4xl font-bold text-white">
-                  {stat.value}
-                </div>
-                <div className="mt-1 text-sm text-white/70">{stat.label}</div>
-              </div>
-            ))}
+            <div>
+              <div className="text-black/60 text-xs uppercase tracking-widest mb-1">Ramp Time</div>
+              <div className="text-black text-3xl font-black">65% Faster</div>
+            </div>
+          </motion.div>
+
+          {/* Red block */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="row-span-1 bg-[#FF0000] p-6 flex items-center mondrian-cell"
+          >
+            <div>
+              <div className="text-white/60 text-xs uppercase tracking-widest mb-1">Year One</div>
+              <div className="text-white text-3xl font-black">3.2x ROI</div>
+            </div>
           </motion.div>
         </div>
-      </Container>
 
-      {/* Bottom Gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        {/* Bottom row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="col-span-12 lg:col-span-3 row-span-2 bg-black p-6 lg:p-8 flex flex-col justify-center border-t-[6px] lg:border-t-0 lg:border-r-[6px] border-black"
+        >
+          <div className="text-white/50 text-xs uppercase tracking-widest mb-2">Trusted By</div>
+          <div className="text-white text-4xl lg:text-5xl font-black">500+</div>
+          <div className="text-white/70 text-sm mt-1">Enterprise Teams</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+          className="hidden lg:flex col-span-6 row-span-2 bg-white border-r-[6px] border-black p-8 items-center justify-center"
+        >
+          <div className="text-center">
+            <p className="text-2xl font-bold text-black max-w-md">
+              &ldquo;Like having your best sales manager on every call.&rdquo;
+            </p>
+            <p className="text-black/50 text-sm mt-4 uppercase tracking-wider">
+              VP of Sales, TechFlow Solutions
+            </p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+          className="hidden lg:flex col-span-3 row-span-2 bg-[#FFDE00] p-8 items-center justify-center mondrian-cell"
+        >
+          <div className="text-center">
+            <div className="text-black text-5xl font-black">24/7</div>
+            <div className="text-black/60 text-xs uppercase tracking-widest mt-2">AI Coaching</div>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

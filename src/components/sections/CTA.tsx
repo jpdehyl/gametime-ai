@@ -1,62 +1,95 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Calendar } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export function CTA() {
   return (
-    <section className="py-24 bg-background">
-      <Container size="narrow">
+    <section className="border-b-[6px] border-black">
+      <div className="grid grid-cols-12 min-h-[500px]">
+        {/* Large CTA block */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary to-accent p-8 sm:p-12 lg:p-16 text-center"
+          className="col-span-12 lg:col-span-8 bg-[#FF0000] p-8 lg:p-16 flex flex-col justify-center border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black"
         >
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-                backgroundSize: "32px 32px",
-              }}
-            />
-          </div>
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-white/60 text-xs uppercase tracking-widest mb-4"
+          >
+            Ready to Transform Your Sales?
+          </motion.span>
 
-          <div className="relative z-10">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Ready to Transform Your Sales?
-            </h2>
-            <p className="text-lg text-white/80 max-w-xl mx-auto mb-8">
-              Join hundreds of high-performing teams using GameTime.ai to close
-              more deals and build winning sales cultures.
-            </p>
+          <h2 className="mondrian-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-white mb-8">
+            Stop Leaving
+            <br />
+            Money On
+            <br />
+            The Table
+          </h2>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="secondary" size="lg">
-                <Calendar className="mr-2 w-5 h-5" />
-                Schedule a Demo
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-white/10 hover:text-white"
-              >
-                Contact Sales
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </div>
+          <p className="text-xl text-white/70 max-w-xl mb-10">
+            Join 500+ sales teams using GameTime.ai to close more deals. Get started in under 5 minutes.
+          </p>
 
-            <p className="mt-6 text-sm text-white/60">
-              No credit card required. Get started in under 5 minutes.
-            </p>
+          <div className="flex flex-wrap gap-4">
+            <Button variant="black" size="lg">
+              Book a Demo
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+            <Button variant="white" size="lg">
+              Talk to Sales
+            </Button>
           </div>
         </motion.div>
-      </Container>
+
+        {/* Right side blocks */}
+        <div className="col-span-12 lg:col-span-4 grid grid-rows-3">
+          {/* Yellow block */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="bg-[#FFDE00] p-6 lg:p-8 border-b-[6px] border-black flex flex-col justify-center mondrian-cell"
+          >
+            <div className="text-black/60 text-xs uppercase tracking-widest mb-2">Setup Time</div>
+            <div className="text-black text-4xl font-black">5 min</div>
+            <div className="text-black/60 text-sm mt-1">No complex integrations</div>
+          </motion.div>
+
+          {/* Blue block */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-[#0000FF] p-6 lg:p-8 border-b-[6px] border-black flex flex-col justify-center mondrian-cell"
+          >
+            <div className="text-white/60 text-xs uppercase tracking-widest mb-2">Free Trial</div>
+            <div className="text-white text-4xl font-black">14 Days</div>
+            <div className="text-white/60 text-sm mt-1">No credit card required</div>
+          </motion.div>
+
+          {/* Black block */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="bg-black p-6 lg:p-8 flex flex-col justify-center mondrian-cell"
+          >
+            <div className="text-white/50 text-xs uppercase tracking-widest mb-2">Results Guaranteed</div>
+            <div className="text-white text-4xl font-black">90 Day</div>
+            <div className="text-white/50 text-sm mt-1">Money-back promise</div>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

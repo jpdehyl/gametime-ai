@@ -1,77 +1,112 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Upload, Sparkles, TrendingUp } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Plug, Brain, TrendingUp } from "lucide-react";
 
 const steps = [
   {
     number: "01",
-    icon: Upload,
-    title: "Connect Your Tools",
-    description:
-      "Integrate with your existing CRM, dialer, and communication tools in minutes. No complex setup required.",
+    icon: Plug,
+    title: "Connect",
+    subtitle: "Your Tools",
+    description: "5-minute integration with Salesforce, HubSpot, Zoom, or any dialer.",
+    color: "blue",
   },
   {
     number: "02",
-    icon: Sparkles,
-    title: "AI Learns Your Playbook",
-    description:
-      "Our AI analyzes your best calls and builds a custom coaching model tailored to your sales methodology.",
+    icon: Brain,
+    title: "AI Learns",
+    subtitle: "Your Playbook",
+    description: "Our AI watches your top performers and builds a custom coaching model.",
+    color: "yellow",
   },
   {
     number: "03",
     icon: TrendingUp,
-    title: "Watch Performance Soar",
-    description:
-      "Your team gets real-time guidance on every call. Track improvement with detailed analytics and insights.",
+    title: "Performance",
+    subtitle: "Soars",
+    description: "Real-time coaching on every call. Watch your team transform.",
+    color: "red",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 bg-background">
-      <Container>
-        <SectionHeading
-          badge="How It Works"
-          title="Get Started in Three Simple Steps"
-          subtitle="Deploy GameTime.ai across your team in days, not months. See ROI from week one."
-        />
+    <section id="how-it-works" className="border-b-[6px] border-black">
+      {/* Section header */}
+      <div className="grid grid-cols-12 border-b-[6px] border-black">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="col-span-12 lg:col-span-4 bg-[#0000FF] p-8 lg:p-12 border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black"
+        >
+          <span className="text-white/60 text-xs uppercase tracking-widest">The Process</span>
+          <h2 className="mondrian-heading text-4xl lg:text-5xl text-white mt-2">
+            How It Works
+          </h2>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="col-span-12 lg:col-span-8 bg-white p-8 lg:p-12 flex items-center"
+        >
+          <p className="text-xl lg:text-2xl text-black/70 max-w-2xl font-medium">
+            Get your team from kickoff to winning in under a week. No complex implementation, no lengthy training.
+          </p>
+        </motion.div>
+      </div>
 
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-24 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-gradient-to-r from-primary via-secondary to-accent" />
+      {/* Steps grid */}
+      <div className="grid grid-cols-12">
+        {steps.map((step, index) => {
+          const bgColor = step.color === "blue" ? "bg-[#0000FF]" :
+                          step.color === "yellow" ? "bg-[#FFDE00]" :
+                          "bg-[#FF0000]";
+          const textColor = step.color === "yellow" ? "text-black" : "text-white";
+          const mutedColor = step.color === "yellow" ? "text-black/60" : "text-white/60";
 
-          <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
-            {steps.map((step, index) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="relative text-center"
-              >
-                {/* Step Number */}
-                <div className="relative mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 z-10">
-                  <step.icon className="w-8 h-8 text-white" />
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-secondary text-secondary-foreground text-sm font-bold flex items-center justify-center">
-                    {step.number}
-                  </span>
+          return (
+            <motion.div
+              key={step.number}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.15 }}
+              className={`col-span-12 lg:col-span-4 ${index < 2 ? 'border-b-[6px] lg:border-b-0 lg:border-r-[6px]' : ''} border-black`}
+            >
+              {/* Number bar */}
+              <div className="h-16 bg-black flex items-center px-8">
+                <span className="text-white text-2xl font-black">{step.number}</span>
+                <div className="ml-auto flex items-center gap-2">
+                  <div className={`w-3 h-3 ${step.color === "blue" ? "bg-[#0000FF]" : step.color === "yellow" ? "bg-[#FFDE00]" : "bg-[#FF0000]"}`} />
+                  <div className={`w-3 h-3 ${step.color === "blue" ? "bg-[#0000FF]" : step.color === "yellow" ? "bg-[#FFDE00]" : "bg-[#FF0000]"}`} />
+                  <div className={`w-3 h-3 ${step.color === "blue" ? "bg-[#0000FF]" : step.color === "yellow" ? "bg-[#FFDE00]" : "bg-[#FF0000]"}`} />
+                </div>
+              </div>
+
+              {/* Content block */}
+              <div className={`${bgColor} p-8 lg:p-10 min-h-[300px] flex flex-col mondrian-cell`}>
+                <div className={`w-14 h-14 border-[3px] ${step.color === "yellow" ? "border-black" : "border-white"} flex items-center justify-center mb-6`}>
+                  <step.icon className={`w-7 h-7 ${textColor}`} />
                 </div>
 
-                <h3 className="text-xl font-semibold text-foreground mb-3">
+                <h3 className={`mondrian-heading text-3xl lg:text-4xl ${textColor} mb-1`}>
                   {step.title}
                 </h3>
-                <p className="text-muted-foreground max-w-xs mx-auto">
+                <h4 className={`mondrian-heading text-3xl lg:text-4xl ${mutedColor} mb-6`}>
+                  {step.subtitle}
+                </h4>
+
+                <p className={`${mutedColor} text-lg mt-auto`}>
                   {step.description}
                 </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </Container>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </section>
   );
 }
