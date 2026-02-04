@@ -2,8 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { TrendingUp, Clock, DollarSign, Users } from "lucide-react";
 
-function AnimatedNumber({ value, suffix, inView }: { value: number; suffix: string; inView: boolean }) {
+function AnimatedNumber({ value, suffix, prefix = "", inView }: { value: number; suffix: string; prefix?: string; inView: boolean }) {
   const [displayValue, setDisplayValue] = useState(0);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function AnimatedNumber({ value, suffix, inView }: { value: number; suffix: stri
 
   return (
     <span className="font-black">
-      {formattedValue}{suffix}
+      {prefix}{formattedValue}{suffix}
     </span>
   );
 }
@@ -54,8 +55,11 @@ export function Metrics() {
           viewport={{ once: true }}
           className="col-span-12 lg:col-span-3 bg-[#FF0000] p-8 lg:p-12 border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black"
         >
-          <span className="text-white/60 text-xs uppercase tracking-widest">The Results</span>
-          <h2 className="mondrian-heading text-4xl lg:text-5xl text-white mt-2">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingUp className="w-4 h-4 text-white/60" />
+            <span className="text-white/60 text-xs uppercase tracking-widest">Results</span>
+          </div>
+          <h2 className="mondrian-heading text-4xl lg:text-5xl text-white">
             Proven Impact
           </h2>
         </motion.div>
@@ -72,20 +76,23 @@ export function Metrics() {
       </div>
 
       {/* Metrics grid - Mondrian asymmetric layout */}
-      <div className="grid grid-cols-12 grid-rows-2 min-h-[500px]">
+      <div className="grid grid-cols-12 lg:grid-rows-2">
         {/* Large red block - 40% More Closes */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="col-span-12 lg:col-span-6 row-span-2 bg-[#FF0000] border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black p-8 lg:p-12 flex flex-col justify-between mondrian-cell"
+          className="col-span-12 lg:col-span-6 lg:row-span-2 bg-[#FF0000] border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black p-8 lg:p-12 flex flex-col justify-between min-h-[300px] lg:min-h-[400px] mondrian-cell group cursor-pointer"
         >
-          <div>
+          <div className="flex items-center justify-between">
             <span className="text-white/60 text-xs uppercase tracking-widest">Close Rate Increase</span>
+            <div className="w-10 h-10 border-2 border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
+              <TrendingUp className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+            </div>
           </div>
           <div>
-            <div className="text-white text-7xl lg:text-9xl">
-              <AnimatedNumber value={40} suffix="%" inView={isInView} />
+            <div className="text-white text-7xl lg:text-9xl group-hover:scale-105 transition-transform origin-left">
+              <AnimatedNumber value={40} suffix="%" prefix="+" inView={isInView} />
             </div>
             <div className="text-white text-2xl lg:text-3xl font-bold mt-4">More Closes</div>
             <p className="text-white/60 text-lg mt-4 max-w-md">
@@ -100,14 +107,17 @@ export function Metrics() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="col-span-12 sm:col-span-6 lg:col-span-3 bg-[#0000FF] border-b-[6px] lg:border-r-[6px] border-black p-6 lg:p-8 flex flex-col justify-between mondrian-cell"
+          className="col-span-6 lg:col-span-3 bg-[#0000FF] border-b-[6px] border-r-[6px] lg:border-r-[6px] border-black p-6 lg:p-8 flex flex-col justify-between min-h-[180px] mondrian-cell group cursor-pointer"
         >
-          <span className="text-white/60 text-xs uppercase tracking-widest">Ramp Time</span>
+          <div className="flex items-center justify-between">
+            <span className="text-white/60 text-xs uppercase tracking-widest">Ramp Time</span>
+            <Clock className="w-4 h-4 text-white/40" />
+          </div>
           <div>
-            <div className="text-white text-5xl lg:text-6xl">
+            <div className="text-white text-4xl lg:text-6xl font-black group-hover:scale-105 transition-transform origin-left">
               <AnimatedNumber value={65} suffix="%" inView={isInView} />
             </div>
-            <div className="text-white text-lg font-bold mt-2">Faster Ramp</div>
+            <div className="text-white text-sm lg:text-lg font-bold mt-2">Faster Ramp</div>
           </div>
         </motion.div>
 
@@ -117,14 +127,17 @@ export function Metrics() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="col-span-12 sm:col-span-6 lg:col-span-3 bg-[#FFDE00] border-b-[6px] lg:border-b-0 border-black p-6 lg:p-8 flex flex-col justify-between mondrian-cell"
+          className="col-span-6 lg:col-span-3 bg-[#FFDE00] border-b-[6px] border-black p-6 lg:p-8 flex flex-col justify-between min-h-[180px] mondrian-cell group cursor-pointer"
         >
-          <span className="text-black/60 text-xs uppercase tracking-widest">Year One</span>
+          <div className="flex items-center justify-between">
+            <span className="text-black/60 text-xs uppercase tracking-widest">Year One</span>
+            <DollarSign className="w-4 h-4 text-black/40" />
+          </div>
           <div>
-            <div className="text-black text-5xl lg:text-6xl">
+            <div className="text-black text-4xl lg:text-6xl font-black group-hover:scale-105 transition-transform origin-left">
               <AnimatedNumber value={3.2} suffix="x" inView={isInView} />
             </div>
-            <div className="text-black text-lg font-bold mt-2">ROI</div>
+            <div className="text-black text-sm lg:text-lg font-bold mt-2">ROI</div>
           </div>
         </motion.div>
 
@@ -134,14 +147,17 @@ export function Metrics() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="col-span-12 sm:col-span-6 lg:col-span-3 bg-white border-b-[6px] sm:border-b-0 sm:border-r-[6px] lg:border-r-[6px] border-black p-6 lg:p-8 flex flex-col justify-between mondrian-cell"
+          className="col-span-6 lg:col-span-3 bg-white border-b-[6px] lg:border-b-0 border-r-[6px] border-black p-6 lg:p-8 flex flex-col justify-between min-h-[180px] mondrian-cell group cursor-pointer"
         >
-          <span className="text-black/60 text-xs uppercase tracking-widest">Manager Time Saved</span>
+          <div className="flex items-center justify-between">
+            <span className="text-black/60 text-xs uppercase tracking-widest">Manager Time</span>
+            <Users className="w-4 h-4 text-black/40" />
+          </div>
           <div>
-            <div className="text-black text-5xl lg:text-6xl">
+            <div className="text-black text-4xl lg:text-6xl font-black group-hover:scale-105 transition-transform origin-left">
               <AnimatedNumber value={50} suffix="%" inView={isInView} />
             </div>
-            <div className="text-black text-lg font-bold mt-2">Less Reviews</div>
+            <div className="text-black text-sm lg:text-lg font-bold mt-2">Less Reviews</div>
           </div>
         </motion.div>
 
@@ -151,12 +167,17 @@ export function Metrics() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="col-span-12 sm:col-span-6 lg:col-span-3 bg-black p-6 lg:p-8 flex flex-col justify-center mondrian-cell"
+          className="col-span-6 lg:col-span-3 bg-black p-6 lg:p-8 flex flex-col justify-between min-h-[180px] mondrian-cell group cursor-pointer"
         >
-          <div className="text-white/50 text-xs uppercase tracking-widest mb-2">Verified Results</div>
-          <div className="text-white text-3xl font-black">500+</div>
-          <div className="text-white/70 text-sm">Enterprise Teams</div>
-          <div className="text-white/70 text-sm">90-Day Average</div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-[#00FF00]" />
+            <span className="text-white/50 text-xs uppercase tracking-widest">Verified</span>
+          </div>
+          <div>
+            <div className="text-white text-4xl lg:text-5xl font-black group-hover:scale-105 transition-transform origin-left">500+</div>
+            <div className="text-white/70 text-sm">Enterprise Teams</div>
+            <div className="text-white/50 text-xs mt-1">90-Day Average</div>
+          </div>
         </motion.div>
       </div>
     </section>
