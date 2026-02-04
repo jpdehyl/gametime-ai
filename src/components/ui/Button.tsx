@@ -21,13 +21,13 @@ export function Button({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        "inline-flex items-center justify-center rounded-full font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2",
+        "inline-flex items-center justify-center rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0f]",
         {
-          "bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary":
+          "bg-white text-[#0a0a0f] hover:bg-white/90 focus:ring-white":
             variant === "primary",
-          "bg-secondary text-secondary-foreground hover:bg-secondary/90 focus:ring-secondary":
+          "bg-[#ff4d4d] text-white hover:bg-[#ff4d4d]/90 focus:ring-[#ff4d4d]":
             variant === "secondary",
-          "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground focus:ring-primary":
+          "border border-[#2a2a3c] text-white/80 hover:bg-white/5 hover:border-white/30 focus:ring-white/50":
             variant === "outline",
         },
         {
