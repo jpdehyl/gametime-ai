@@ -13,34 +13,88 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
+  metadataBase: new URL('https://gametime-ai.app'),
+  title: {
+    default: "GameTime.ai | AI-Powered Sales Intelligence Platform",
+    template: "%s | GameTime.ai",
+  },
   description:
-    "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time. A product by GroundGame.",
+    "The AI layer that makes sales teams unstoppable. Pre-call research, real-time coaching, post-call analysis, and AE handoff — all in one platform. Built by GroundGame.",
   keywords: [
-    "AI sales coaching",
-    "sales intelligence",
-    "BPO solutions",
-    "call coaching", 
-    "sales performance",
+    "AI sales intelligence",
+    "sales coaching platform",
+    "BPO AI solutions",
+    "AI call analysis",
+    "sales team productivity",
+    "pre-call intelligence",
+    "real-time sales coaching",
+    "SDR performance",
+    "AI lead research",
+    "sales copilot",
     "GroundGame",
-    "pre-call research",
-    "real-time coaching",
-    "sales AI",
+    "GameTime AI",
+    "call center AI",
+    "sales automation",
+    "AI for BPO",
   ],
   authors: [{ name: "GroundGame" }],
+  creator: "GroundGame",
+  publisher: "GroundGame",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
+    title: "GameTime.ai | AI-Powered Sales Intelligence Platform",
     description:
-      "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time.",
-    url: "https://gametime.ai",
+      "The AI layer that makes sales teams unstoppable. Pre-call research, real-time coaching, post-call analysis — all in one platform.",
+    url: "https://gametime-ai.app",
     siteName: "GameTime.ai",
     type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "/screenshots/dashboard-callqueue.jpg",
+        width: 1200,
+        height: 630,
+        alt: "GameTime.ai - AI-Powered Sales Intelligence Dashboard",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
+    title: "GameTime.ai | AI-Powered Sales Intelligence Platform",
     description:
-      "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time.",
+      "The AI layer that makes sales teams unstoppable. Pre-call research, real-time coaching, post-call analysis — all in one platform.",
+    images: ["/screenshots/dashboard-callqueue.jpg"],
+  },
+  alternates: {
+    canonical: "https://gametime-ai.app",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "GameTime.ai",
+  applicationCategory: "BusinessApplication",
+  description:
+    "AI-powered sales intelligence platform. Pre-call research, real-time coaching, post-call analysis, and AE handoff for sales teams and BPOs.",
+  url: "https://gametime-ai.app",
+  author: {
+    "@type": "Organization",
+    name: "GroundGame",
+  },
+  offers: {
+    "@type": "Offer",
+    availability: "https://schema.org/PreOrder",
   },
 };
 
@@ -51,6 +105,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
