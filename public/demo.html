@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameTime AI — WhatsApp Demo</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --wa-bg: #0B141A;
+    --wa-chat-bg: #0B141A;
+    --wa-header: #1F2C34;
+    --wa-input-bg: #1F2C34;
+    --wa-green: #25D366;
+    --wa-outgoing: #005C4B;
+    --wa-incoming: #202C33;
+    --wa-text: #E9EDEF;
+    --wa-text-secondary: #8696A0;
+    --wa-time: rgba(255,255,255,0.5);
+    --wa-border: #222D34;
+    --phone-width: 375px;
+    --phone-height: 720px;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #080808;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Scene label ── */
+  #scene-label {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  /* ── Phone Frame ── */
+  #phone-frame {
+    width: var(--phone-width);
+    height: var(--phone-height);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    background: var(--wa-bg);
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 0 0 1.5px #222,
+      0 0 0 3px #111,
+      inset 0 0 0 0.5px rgba(255,255,255,0.04),
+      0 30px 100px rgba(0,0,0,0.7),
+      0 8px 30px rgba(0,0,0,0.5);
+    animation: frameIn 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes frameIn {
+    from { opacity: 0; transform: scale(0.96) translateY(16px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, var(--wa-green), #34D399);
+    width: 0%;
+    transition: width 0.4s ease;
+    z-index: 50;
+  }
+
+  /* ── Status bar (iOS) ── */
+  #status-bar {
+    height: 54px;
+    background: var(--wa-header);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wa-text);
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  #status-bar .time-text { font-size: 15px; font-weight: 600; letter-spacing: 0.2px; }
+  #status-bar .right-icons { display: flex; gap: 5px; align-items: center; }
+  #status-bar .right-icons svg { height: 11px; fill: var(--wa-text); }
+
+  /* Dynamic Island */
+  #dynamic-island {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 33px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+  }
+
+  /* ── Chat header ── */
+  #chat-header {
+    height: 52px;
+    background: var(--wa-header);
+    display: flex;
+    align-items: center;
+    padding: 0 6px 0 4px;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .back-arrow {
+    color: var(--wa-green);
+    font-size: 22px;
+    margin-right: 2px;
+    font-weight: 300;
+    padding: 0 4px;
+    line-height: 1;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #128C7E 0%, #25D366 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .contact-info { flex: 1; min-width: 0; }
+  .contact-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--wa-text);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .contact-status {
+    font-size: 12px;
+    color: var(--wa-text-secondary);
+    line-height: 1.25;
+    transition: all 0.2s;
+  }
+  .contact-status.typing { color: var(--wa-green); }
+  .header-icons {
+    display: flex;
+    gap: 20px;
+    color: var(--wa-text-secondary);
+    font-size: 16px;
+    padding-right: 4px;
+  }
+  .header-icons svg { width: 20px; height: 20px; fill: var(--wa-text-secondary); }
+
+  /* ── Chat area ── */
+  #chat-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 10px 8px;
+    background: var(--wa-chat-bg);
+    position: relative;
+    scroll-behavior: auto;
+  }
+
+  /* WhatsApp-style doodle background */
+  #chat-area::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.5'%3E%3Ccircle cx='6' cy='6' r='1'/%3E%3Ccircle cx='26' cy='18' r='1'/%3E%3Ccircle cx='14' cy='32' r='1'/%3E%3Ccircle cx='34' cy='8' r='0.8'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #chat-area > * { position: relative; z-index: 1; }
+
+  /* Scrollbar */
+  #chat-area::-webkit-scrollbar { width: 3px; }
+  #chat-area::-webkit-scrollbar-track { background: transparent; }
+  #chat-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+  /* ── Date chip ── */
+  .date-chip {
+    text-align: center;
+    margin: 8px 0 4px;
+    clear: both;
+  }
+  .date-chip span {
+    background: #182229;
+    color: rgba(233,237,239,0.6);
+    font-size: 11.5px;
+    padding: 5px 12px;
+    border-radius: 7px;
+    display: inline-block;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Message bubbles ── */
+  .msg-row {
+    display: flex;
+    margin: 1.5px 0;
+    animation: msgSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .msg-row.out { justify-content: flex-end; }
+  .msg-row.in { justify-content: flex-start; }
+
+  @keyframes msgSlide {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bubble {
+    max-width: 88%;
+    padding: 5px 7px 3px 8px;
+    border-radius: 7.5px;
+    font-size: 14.2px;
+    line-height: 1.38;
+    color: var(--wa-text);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative;
+  }
+
+  .bubble.incoming {
+    background: var(--wa-incoming);
+    border-radius: 0 7.5px 7.5px 7.5px;
+  }
+  .bubble.incoming.tail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -7px;
+    width: 0;
+    height: 0;
+    border-top: 0 solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 8px solid var(--wa-incoming);
+  }
+
+  .bubble.outgoing {
+    background: var(--wa-outgoing);
+    border-radius: 7.5px 0 7.5px 7.5px;
+  }
+  .bubble.outgoing.tail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -7px;
+    width: 0;
+    height: 0;
+    border-top: 0 solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 8px solid var(--wa-outgoing);
+  }
+
+  .msg-text { margin-bottom: 0; }
+
+  .msg-footer {
+    float: right;
+    margin: 2px -3px -2px 6px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+  }
+  .msg-time {
+    font-size: 11px;
+    color: var(--wa-time);
+    line-height: 1;
+  }
+  .msg-check {
+    font-size: 15px;
+    color: #53BDEB;
+    line-height: 1;
+    margin-top: -1px;
+  }
+
+  /* ── Typing indicator ── */
+  .typing-row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 2px 0;
+    animation: msgSlide 0.2s ease-out;
+  }
+  .typing-bubble {
+    background: var(--wa-incoming);
+    border-radius: 0 7.5px 7.5px 7.5px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 3.5px;
+    position: relative;
+  }
+  .typing-bubble::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -7px;
+    border-top: 0 solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 8px solid var(--wa-incoming);
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--wa-text-secondary);
+    animation: bounce 1.4s infinite ease-in-out;
+  }
+  .dot:nth-child(2) { animation-delay: 0.16s; }
+  .dot:nth-child(3) { animation-delay: 0.32s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* ── Input bar ── */
+  #input-bar {
+    height: 50px;
+    background: var(--wa-bg);
+    display: flex;
+    align-items: center;
+    padding: 4px 5px;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .input-field {
+    flex: 1;
+    height: 40px;
+    background: var(--wa-input-bg);
+    border-radius: 21px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 10px;
+    gap: 6px;
+  }
+  .input-field .emoji-icon { font-size: 22px; opacity: 0.6; flex-shrink: 0; }
+  .input-text-wrap {
+    flex: 1;
+    font-size: 15px;
+    color: var(--wa-text);
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  .input-text-wrap.placeholder { color: var(--wa-text-secondary); }
+  .input-field .attach-icons {
+    display: flex;
+    gap: 10px;
+    font-size: 18px;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--wa-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .send-btn svg { width: 18px; height: 18px; fill: var(--wa-bg); }
+
+  /* Typing cursor for user input */
+  .cursor::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 18px;
+    background: var(--wa-green);
+    margin-left: 1px;
+    vertical-align: text-bottom;
+    animation: cursorBlink 0.55s step-end infinite;
+  }
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ── Controls ── */
+  #controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    z-index: 100;
+  }
+  #controls button {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.55);
+    padding: 7px 16px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: 0.2px;
+    user-select: none;
+  }
+  #controls button:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.15);
+  }
+  #controls button.active {
+    background: rgba(37, 211, 102, 0.12);
+    border-color: rgba(37, 211, 102, 0.25);
+    color: var(--wa-green);
+  }
+
+  /* ── End screen ── */
+  #end-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(170deg, #0B141A 0%, #0a1e14 50%, #0B141A 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.2s ease;
+    z-index: 40;
+    padding: 40px;
+    border-radius: 44px;
+  }
+  #end-screen.visible { opacity: 1; pointer-events: auto; }
+
+  .end-logo {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--wa-text);
+    letter-spacing: -1px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+  }
+  #end-screen.visible .end-logo { opacity: 1; transform: translateY(0); }
+  .end-logo span { color: var(--wa-green); }
+
+  .end-tagline {
+    font-size: 15px;
+    color: var(--wa-text-secondary);
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.55;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+  }
+  #end-screen.visible .end-tagline { opacity: 1; transform: translateY(0); }
+
+  .end-url {
+    font-size: 13px;
+    color: var(--wa-green);
+    margin-top: 28px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    transition: opacity 0.8s ease 1s;
+  }
+  #end-screen.visible .end-url { opacity: 0.7; }
+
+  /* ── Scene transition ── */
+  #scene-transition {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--wa-bg);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+    transition: opacity 0.35s ease;
+    border-radius: 44px;
+  }
+  #scene-transition.active { opacity: 1; }
+
+  /* ── Responsive ── */
+  @media (max-height: 800px) {
+    :root { --phone-height: 640px; }
+  }
+  @media (max-height: 700px) {
+    :root { --phone-height: 580px; }
+    #scene-label { top: 8px; }
+    #controls { margin-top: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scene-label">Scene 1: Morning Brief</div>
+
+<div id="phone-frame">
+  <div id="progress-bar"></div>
+  <div id="dynamic-island"></div>
+
+  <div id="status-bar">
+    <span class="time-text">9:41</span>
+    <span class="right-icons">
+      <!-- Signal -->
+      <svg viewBox="0 0 18 12"><rect x="0" y="9" width="3" height="3" rx="0.5"/><rect x="4.5" y="6" width="3" height="6" rx="0.5"/><rect x="9" y="3" width="3" height="9" rx="0.5"/><rect x="13.5" y="0" width="3" height="12" rx="0.5"/></svg>
+      <!-- WiFi -->
+      <svg viewBox="0 0 16 12"><path d="M8 10.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM4.5 8.2a5 5 0 017 0" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M1.8 5.5a8.5 8.5 0 0112.4 0" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+      <!-- Battery -->
+      <svg viewBox="0 0 28 13"><rect x="0" y="0.5" width="24" height="12" rx="2.5" stroke="currentColor" stroke-width="1" fill="none"/><rect x="2" y="2.5" width="18" height="8" rx="1" fill="var(--wa-green)"/><path d="M25.5 4v5a1.5 1.5 0 000-5z" fill="currentColor" opacity="0.4"/></svg>
+    </span>
+  </div>
+
+  <div id="chat-header">
+    <div class="back-arrow">‹</div>
+    <div class="avatar">🤖</div>
+    <div class="contact-info">
+      <div class="contact-name" id="header-name">GameTime AI</div>
+      <div class="contact-status" id="header-status">online</div>
+    </div>
+    <div class="header-icons">
+      <!-- Video -->
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4V6.5l-4 4z"/></svg>
+      <!-- Phone -->
+      <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.3 15.3 0 006.6 6.6l2.2-2.2a1 1 0 011-.2 11.4 11.4 0 003.6.6 1 1 0 011 1v3.4a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.3 1L6.6 10.8z"/></svg>
+      <!-- More -->
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+    </div>
+  </div>
+
+  <div id="chat-area">
+    <div class="date-chip"><span>TODAY</span></div>
+  </div>
+
+  <div id="input-bar">
+    <div class="input-field">
+      <span class="emoji-icon">😊</span>
+      <span class="input-text-wrap placeholder" id="input-display">Message</span>
+      <span class="attach-icons">
+        <span>📎</span>
+        <span>📷</span>
+      </span>
+    </div>
+    <div class="send-btn">
+      <svg viewBox="0 0 24 24"><path d="M1.1 21.8L23 12 1.1 2.2 1 10l15 2-15 2z"/></svg>
+    </div>
+  </div>
+
+  <div id="scene-transition"></div>
+  <div id="end-screen">
+    <div class="end-logo">Game<span>Time</span>.ai</div>
+    <div class="end-tagline">"Dashboards show data.<br>This drives action."</div>
+    <div class="end-url">gametime-ai.app</div>
+  </div>
+</div>
+
+<div id="controls">
+  <button id="btn-restart" onclick="restartDemo()">↺ Restart</button>
+  <button id="btn-playpause" onclick="togglePlay()">⏸ Pause</button>
+  <button id="btn-speed" onclick="cycleSpeed()">1×</button>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ─── State ───
+  const SPEEDS = [1, 1.5, 2];
+  let speedIdx = 0;
+  let speed = 1;
+  let paused = false;
+  let running = false;
+  let abort = null;
+
+  // ─── DOM ───
+  const $ = id => document.getElementById(id);
+  const chatArea = $('chat-area');
+  const progressBar = $('progress-bar');
+  const sceneLabel = $('scene-label');
+  const inputDisplay = $('input-display');
+  const headerName = $('header-name');
+  const headerStatus = $('header-status');
+  const endScreen = $('end-screen');
+  const sceneTrans = $('scene-transition');
+  const btnPP = $('btn-playpause');
+
+  // ─── Script ───
+  const scenes = [
+    {
+      label: 'Scene 1: Morning Brief',
+      steps: [
+        { who: 'bot', time: '8:00 AM', text: `🎯 Good morning Robin! Here's your Tuesday:\n\n📞 Top 5 Hot Leads:\n1. Daniel Jackson — Delta Precision (93) 🔥\n2. Robert Taylor — Northern Energy (93) 🔥\n3. Ashley Turner — Stellar Defense (92) 🔥\n4. Matthew Miller — Midwest Construction (91)\n5. Frank Moore — Bobcat Company (90)\n\n📋 8 follow-ups due today\n⏰ 2 callbacks: Megan Richardson 10:30 AM, Peter Hughes 2:15 PM\n🏆 Yesterday: 14 calls | 5 connected | 2 qualified | 1 meeting\n\n💡 Tip: Your connect rate peaks on Wednesdays 11 AM-1 PM. Block that time for your hottest leads.\n\nReady? Just say "prep [company name]" to start.` }
+      ]
+    },
+    {
+      label: 'Scene 2: Lead Research',
+      steps: [
+        { who: 'user', time: '8:01 AM', text: `prep Delta Precision` },
+        { who: 'bot', time: '8:01 AM', text: `🎯 Delta Precision — Call Brief\n\n👤 Daniel Jackson — VP Operations (6yr tenure)\n🏢 500-1000 employees | Precision Manufacturing | Michigan\n📊 Fit Score: 93/100 🔥🔥🔥\n\n💰 BANT:\n• Budget: $100k-250k (enterprise procurement)\n• Authority: VP Ops — influences, reports to CTO ⚡\n• Need: Multi-site CAD standardization\n• Timeline: Active evaluation — visited pricing page 2x this week\n\n⚠️ Pain Signals:\n• Running 3 different CAD tools across 4 plants\n• Recent job postings for "Design Systems Manager" — consolidation coming\n• Competitor (Keystone Mfg) just switched to SolidWorks last quarter\n\n📞 Opening:\n"Hi Daniel, I saw Delta Precision recently posted for a Design Systems Manager — sounds like you're standardizing your engineering tools. We've helped companies like Keystone Manufacturing consolidate from multiple CAD platforms to one. Curious if that resonates?"\n\n❓ Discovery:\n1. How many CAD platforms are you running across your plants right now?\n2. What's driving the push to standardize?\n3. Who else is involved in evaluating new tools?\n\n🛡️ Likely Objection: "We're already talking to [competitor]"\n→ "That's great — most companies evaluate 2-3 options. What criteria matter most to your team?"\n\nReady to call? Just say "call Daniel Jackson"` }
+      ]
+    },
+    {
+      label: 'Scene 3: One-Tap Call',
+      steps: [
+        { who: 'user', time: '8:03 AM', text: `call Daniel Jackson` },
+        { who: 'bot', time: '8:03 AM', text: `📞 Connecting to Daniel Jackson at Delta Precision...\n+1-555-847-2913\n\n⏱ Call timer started.\n\n💡 While you wait: Daniel's assistant is Lisa. If she answers, ask for his direct line.\n\nGood luck! 🎯` }
+      ]
+    },
+    {
+      label: 'Scene 4: Post-Call Coaching',
+      steps: [
+        { who: 'bot', time: '8:08 AM', text: `📊 Call Coaching — Daniel Jackson @ Delta Precision\n\n⏱ 4:32 min | Disposition: Callback Scheduled ✅\n\n📈 Scorecard:\nOpening: 8/10 ⭐ | Discovery: 7/10 | Listening: 8/10\nValue Prop: 7/10 | Objection Handling: 6/10\nClosing: 9/10 ⭐ | Compliance: 10/10\nOverall: 7.9/10\n\n✅ What Went Well:\n• Strong personalized opening — referenced their job posting\n• Great closing — got commitment for Thursday callback\n• Let Daniel talk 62% of the time (ideal: 60%+)\n\n🔧 One Thing to Improve:\n• When Daniel mentioned "budget concerns," you pivoted too fast to pricing. Next time, dig deeper: "Help me understand — is it the total investment or the timing that's the challenge?"\n\n📝 Auto-logged to Salesforce ✅\n📅 Follow-up: Thursday 2:00 PM (added to your queue)\n\nSay "qualify Daniel" when ready to pass to AE.` }
+      ]
+    },
+    {
+      label: 'Scene 5: Quick Win',
+      steps: [
+        { who: 'user', time: '8:09 AM', text: `next` },
+        { who: 'bot', time: '8:09 AM', text: `⚡ Next up:\n\nRobert Taylor — VP Engineering @ Northern Energy (93) 🔥\n• Oil & gas, 800 emp, Alberta\n• Pain: Legacy CATIA licenses expiring Q2\n• Last touched: 3 days ago (email opened)\n\nSay "prep Northern Energy" or "skip" →` }
+      ]
+    },
+    {
+      label: 'Scene 6: Qualify & Handoff',
+      steps: [
+        { who: 'user', time: '8:10 AM', text: `qualify Daniel Jackson` },
+        { who: 'bot', time: '8:10 AM', text: `✅ Daniel Jackson → AE Pipeline\n\n📋 TOFU Summary sent to David Chen (AE):\n\nCompany: Delta Precision (500-1000 emp)\nContact: Daniel Jackson, VP Operations\nFit Score: 93 | Status: Qualified\nBudget: $100k-250k | Timeline: Active evaluation\nPain: Multi-site CAD standardization (3 platforms, 4 plants)\nNext: Callback Thursday 2 PM — wants pricing for enterprise license\n\nDavid has been notified via Teams + Salesforce.\n\n🎉 Nice work! That's your 3rd qualified lead this week.\nYou're on pace for 6 meetings — 2 ahead of target! 🏆` }
+      ]
+    },
+    {
+      label: 'Scene 7: Manager View',
+      clearChat: true,
+      headerSub: 'Carmen Delgado — Sales Manager',
+      steps: [
+        { who: 'user', time: '12:15 PM', text: `how's the team today?` },
+        { who: 'bot', time: '12:15 PM', text: `📊 Team Dashboard — Tuesday Feb 4\n\n👥 Active SDRs: 7/7\n📞 Total calls today: 47 (on pace for 95)\n🎯 Qualified: 4\n📅 Meetings booked: 2\n\n🏆 Leaderboard (Today):\n1. Robin — 12 calls, 2 qualified ⭐\n2. Juan Gonzalez — 8 calls, 1 qualified\n3. Valentina Reyes — 9 calls, 1 qualified\n4. Diego Ramirez — 3 calls ⚠️\n\n⚠️ Alert: Diego's volume is low today (3 calls by noon). Yesterday was also below average. Might need a check-in.\n\n🔥 3 unworked hot leads (48+ hrs):\n• Gates Industrial — Betty Flores (89)\n• Rexnord Corp — Nancy Stewart (87)\n\nWant me to reassign them?` }
+      ]
+    }
+  ];
+
+  // ─── Helpers ───
+  function wait(ms) {
+    return new Promise((resolve, reject) => {
+      const target = ms / speed;
+      let elapsed = 0;
+      const tick = 40;
+      const id = setInterval(() => {
+        if (abort && abort.signal.aborted) { clearInterval(id); reject(new Error('abort')); return; }
+        if (!paused) elapsed += tick;
+        if (elapsed >= target) { clearInterval(id); resolve(); }
+      }, tick);
+    });
+  }
+
+  function scrollDown() {
+    // Use instant scroll for reliability
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  function escapeHTML(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function formatText(raw) {
+    let h = escapeHTML(raw);
+    // Bold
+    h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Italic
+    h = h.replace(/(?<!\w)_([^_]+)_(?!\w)/g, '<em>$1</em>');
+    // Newlines
+    h = h.replace(/\n/g, '<br>');
+    return h;
+  }
+
+  function addMessage(who, text, time, isTail) {
+    const dir = who === 'bot' ? 'in' : 'out';
+    const bubbleType = who === 'bot' ? 'incoming' : 'outgoing';
+
+    const row = document.createElement('div');
+    row.className = 'msg-row ' + dir;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble ' + bubbleType + (isTail !== false ? ' tail' : '');
+
+    const check = who === 'user' ? '<span class="msg-check">✓✓</span>' : '';
+    bubble.innerHTML =
+      '<div class="msg-text">' + formatText(text) + '</div>' +
+      '<span class="msg-footer"><span class="msg-time">' + time + '</span>' + check + '</span>';
+
+    row.appendChild(bubble);
+    chatArea.appendChild(row);
+    scrollDown();
+  }
+
+  function showTyping() {
+    removeTyping();
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = 'typing-row';
+    row.innerHTML = '<div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+    chatArea.appendChild(row);
+    headerStatus.textContent = 'typing...';
+    headerStatus.classList.add('typing');
+    scrollDown();
+  }
+
+  function removeTyping() {
+    const el = $('typing-row');
+    if (el) el.remove();
+    headerStatus.classList.remove('typing');
+  }
+
+  function restoreStatus(scene) {
+    if (scene && scene.headerSub) {
+      headerStatus.textContent = scene.headerSub;
+    } else {
+      headerStatus.textContent = 'online';
+    }
+    headerStatus.classList.remove('typing');
+  }
+
+  function typingDuration(text) {
+    const len = text.length;
+    if (len < 80) return 1200;
+    if (len < 200) return 2000;
+    if (len < 500) return 3000;
+    if (len < 800) return 3800;
+    return 4500;
+  }
+
+  async function typeInput(text) {
+    inputDisplay.className = 'input-text-wrap cursor';
+    inputDisplay.textContent = '';
+    const perChar = 40;
+    for (let i = 0; i < text.length; i++) {
+      inputDisplay.textContent = text.substring(0, i + 1);
+      await wait(perChar);
+    }
+    inputDisplay.classList.remove('cursor');
+    await wait(350);
+    inputDisplay.className = 'input-text-wrap placeholder';
+    inputDisplay.textContent = 'Message';
+  }
+
+  function clearMessages() {
+    chatArea.innerHTML = '<div class="date-chip"><span>TODAY</span></div>';
+  }
+
+  function setProgress(frac) {
+    progressBar.style.width = (frac * 100) + '%';
+  }
+
+  // Count total steps
+  let totalSteps = 0;
+  scenes.forEach(s => totalSteps += s.steps.length);
+
+  // ─── Main Engine ───
+  async function run() {
+    if (running) return;
+    running = true;
+    abort = new AbortController();
+    let done = 0;
+
+    try {
+      for (let si = 0; si < scenes.length; si++) {
+        const scene = scenes[si];
+
+        // Scene transition
+        sceneLabel.style.opacity = '0';
+        await wait(200);
+
+        if (scene.clearChat) {
+          sceneTrans.classList.add('active');
+          await wait(400);
+          clearMessages();
+          if (scene.headerSub) headerStatus.textContent = scene.headerSub;
+          sceneTrans.classList.remove('active');
+          await wait(200);
+        }
+
+        sceneLabel.textContent = scene.label;
+        sceneLabel.style.opacity = '1';
+
+        if (si > 0 && !scene.clearChat) await wait(700);
+
+        for (let i = 0; i < scene.steps.length; i++) {
+          const step = scene.steps[i];
+
+          if (step.who === 'user') {
+            await typeInput(step.text);
+            addMessage('user', step.text, step.time);
+            await wait(500);
+          } else {
+            await wait(600);
+            showTyping();
+            await wait(typingDuration(step.text));
+            removeTyping();
+            restoreStatus(scene);
+            addMessage('bot', step.text, step.time);
+            await wait(1000);
+          }
+
+          done++;
+          setProgress(done / totalSteps);
+        }
+
+        // Between scenes
+        if (si < scenes.length - 1) await wait(1800);
+      }
+
+      // End screen
+      await wait(2500);
+      endScreen.classList.add('visible');
+      setProgress(1);
+      sceneLabel.style.opacity = '0';
+
+    } catch (e) {
+      if (e.message !== 'abort') console.error(e);
+    }
+
+    running = false;
+  }
+
+  // ─── Controls ───
+  window.togglePlay = function() {
+    paused = !paused;
+    btnPP.innerHTML = paused ? '▶ Play' : '⏸ Pause';
+    btnPP.classList.toggle('active', paused);
+  };
+
+  window.cycleSpeed = function() {
+    speedIdx = (speedIdx + 1) % SPEEDS.length;
+    speed = SPEEDS[speedIdx];
+    $('btn-speed').textContent = speed + '×';
+  };
+
+  window.restartDemo = function() {
+    if (abort) abort.abort();
+    paused = false;
+    btnPP.innerHTML = '⏸ Pause';
+    btnPP.classList.remove('active');
+    clearMessages();
+    endScreen.classList.remove('visible');
+    setProgress(0);
+    headerName.textContent = 'GameTime AI';
+    headerStatus.textContent = 'online';
+    headerStatus.classList.remove('typing');
+    inputDisplay.className = 'input-text-wrap placeholder';
+    inputDisplay.textContent = 'Message';
+    removeTyping();
+    setTimeout(() => run(), 250);
+  };
+
+  // ─── Keyboard ───
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+    if (e.code === 'KeyR') restartDemo();
+    if (e.code === 'KeyS') cycleSpeed();
+  });
+
+  // ─── GO ───
+  window.addEventListener('load', () => setTimeout(run, 600));
+})();
+</script>
+
+</body>
+</html>
