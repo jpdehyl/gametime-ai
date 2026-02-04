@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "GameTime.ai | AI-Powered Sales Intelligence",
     description:
       "Transform your sales team with AI-powered coaching and real-time intelligence.",
-    url: "https://gametime.ai",
+    url: "https://gametime-ai-demo.vercel.app",
     siteName: "GameTime.ai",
     type: "website",
   },
