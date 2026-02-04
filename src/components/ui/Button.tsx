@@ -4,13 +4,13 @@ import { cn } from "@/lib/utils";
 import { motion, HTMLMotionProps } from "framer-motion";
 
 interface ButtonProps extends Omit<HTMLMotionProps<"button">, "children"> {
-  variant?: "primary" | "secondary" | "outline";
+  variant?: "red" | "blue" | "yellow" | "black" | "white";
   size?: "sm" | "md" | "lg";
   children: React.ReactNode;
 }
 
 export function Button({
-  variant = "primary",
+  variant = "black",
   size = "md",
   className,
   children,
@@ -18,22 +18,26 @@ export function Button({
 }: ButtonProps) {
   return (
     <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ x: -2, y: -2 }}
+      whileTap={{ x: 0, y: 0 }}
       className={cn(
-        "inline-flex items-center justify-center rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0a0a0f]",
+        // Base styles - Mondrian aesthetic: no rounded corners, bold borders
+        "inline-flex items-center justify-center font-black uppercase tracking-wide transition-all border-[3px] border-black",
+        // Shadow on hover
+        "hover:shadow-[4px_4px_0_0_#000]",
+        // Variants - pure Mondrian colors
         {
-          "bg-white text-[#0a0a0f] hover:bg-white/90 focus:ring-white":
-            variant === "primary",
-          "bg-[#ff4d4d] text-white hover:bg-[#ff4d4d]/90 focus:ring-[#ff4d4d]":
-            variant === "secondary",
-          "border border-[#2a2a3c] text-white/80 hover:bg-white/5 hover:border-white/30 focus:ring-white/50":
-            variant === "outline",
+          "bg-[#FF0000] text-white": variant === "red",
+          "bg-[#0000FF] text-white": variant === "blue",
+          "bg-[#FFDE00] text-black": variant === "yellow",
+          "bg-black text-white": variant === "black",
+          "bg-white text-black": variant === "white",
         },
+        // Sizes
         {
-          "px-4 py-2 text-sm": size === "sm",
-          "px-6 py-3 text-base": size === "md",
-          "px-8 py-4 text-lg": size === "lg",
+          "px-4 py-2 text-xs": size === "sm",
+          "px-6 py-3 text-sm": size === "md",
+          "px-8 py-4 text-base": size === "lg",
         },
         className
       )}

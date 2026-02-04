@@ -1,41 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Broadcast Studio Dark Theme */
-  --background: #0a0a0f;
-  --foreground: #f0f0f5;
+  /* Mondrian Color Palette - Pure, No Gradients */
+  --mondrian-red: #FF0000;
+  --mondrian-yellow: #FFDE00;
+  --mondrian-blue: #0000FF;
+  --mondrian-black: #000000;
+  --mondrian-white: #FFFFFF;
 
-  /* Primary - Deep navy broadcast */
-  --primary: #1a1a2e;
-  --primary-foreground: #ffffff;
+  /* Semantic mappings */
+  --background: #FFFFFF;
+  --foreground: #000000;
 
-  /* Secondary - Hot orange/red broadcast energy */
-  --secondary: #ff4d4d;
-  --secondary-foreground: #ffffff;
+  --primary: #0000FF;
+  --primary-foreground: #FFFFFF;
 
-  /* Accent - Electric cyan for data/stats */
-  --accent: #00f0ff;
-  --accent-foreground: #0a0a0f;
+  --secondary: #FF0000;
+  --secondary-foreground: #FFFFFF;
 
-  /* Tertiary - Lime green for success/wins */
-  --tertiary: #39ff14;
-  --tertiary-foreground: #0a0a0f;
+  --accent: #FFDE00;
+  --accent-foreground: #000000;
 
-  /* Muted backgrounds */
-  --muted: #16161f;
-  --muted-foreground: #7a7a8c;
+  /* Grid lines */
+  --grid-line: #000000;
+  --grid-line-width: 6px;
 
-  /* Card/surface colors */
-  --card: #12121a;
-  --card-foreground: #f0f0f5;
+  /* Muted for subtle elements */
+  --muted: #F5F5F5;
+  --muted-foreground: #333333;
+
+  /* Card */
+  --card: #FFFFFF;
+  --card-foreground: #000000;
 
   /* Border */
-  --border: #2a2a3c;
-
-  /* Broadcast-specific */
-  --broadcast-red: #ff3b3b;
-  --broadcast-glow: rgba(0, 240, 255, 0.3);
-  --scoreboard-bg: #0d0d12;
+  --border: #000000;
 }
 
 @theme inline {
@@ -47,15 +46,16 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-tertiary: var(--tertiary);
-  --color-tertiary-foreground: var(--tertiary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
-  --color-broadcast-red: var(--broadcast-red);
-  --color-scoreboard-bg: var(--scoreboard-bg);
+  --color-mondrian-red: var(--mondrian-red);
+  --color-mondrian-yellow: var(--mondrian-yellow);
+  --color-mondrian-blue: var(--mondrian-blue);
+  --color-mondrian-black: var(--mondrian-black);
+  --color-mondrian-white: var(--mondrian-white);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -74,88 +74,136 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
-/* Custom scrollbar - broadcast style */
+/* Mondrian scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background: var(--mondrian-white);
+  border-left: 2px solid var(--mondrian-black);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
+  background: var(--mondrian-black);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
+  background: var(--mondrian-blue);
 }
 
-/* Selection - broadcast red */
+/* Selection */
 ::selection {
-  background: var(--secondary);
-  color: var(--secondary-foreground);
+  background: var(--mondrian-yellow);
+  color: var(--mondrian-black);
 }
 
-/* Scanline overlay effect */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+/* Mondrian Grid System */
+.mondrian-cell {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Glow pulse animation */
-@keyframes glowPulse {
-  0%, 100% {
-    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px rgba(0, 240, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px rgba(0, 240, 255, 0.5);
-  }
+.mondrian-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--mondrian-black);
 }
 
-/* Live indicator pulse */
-@keyframes livePulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+.mondrian-border {
+  border: var(--grid-line-width) solid var(--mondrian-black);
 }
 
-/* Score count animation */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.mondrian-border-t {
+  border-top: var(--grid-line-width) solid var(--mondrian-black);
 }
 
-/* Utility classes for broadcast effects */
-.glow-accent {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+.mondrian-border-b {
+  border-bottom: var(--grid-line-width) solid var(--mondrian-black);
 }
 
-.glow-secondary {
-  box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+.mondrian-border-l {
+  border-left: var(--grid-line-width) solid var(--mondrian-black);
 }
 
-.text-glow-accent {
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+.mondrian-border-r {
+  border-right: var(--grid-line-width) solid var(--mondrian-black);
 }
 
-.text-glow-secondary {
-  text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+/* Color blocks */
+.block-red {
+  background-color: var(--mondrian-red);
+  color: var(--mondrian-white);
 }
 
-/* Grid pattern for broadcast backgrounds */
-.broadcast-grid {
-  background-image:
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
+.block-yellow {
+  background-color: var(--mondrian-yellow);
+  color: var(--mondrian-black);
 }
 
-/* Scoreboard number styling */
-.scoreboard-number {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.05em;
+.block-blue {
+  background-color: var(--mondrian-blue);
+  color: var(--mondrian-white);
+}
+
+.block-white {
+  background-color: var(--mondrian-white);
+  color: var(--mondrian-black);
+}
+
+.block-black {
+  background-color: var(--mondrian-black);
+  color: var(--mondrian-white);
+}
+
+/* Typography - Geometric, Bold */
+.mondrian-heading {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+.mondrian-subheading {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+
+/* Hover effects for blocks */
+.mondrian-interactive {
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mondrian-interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--mondrian-black);
+}
+
+.mondrian-interactive:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+/* Grid layout helpers */
+.mondrian-grid {
+  display: grid;
+  gap: 0;
+}
+
+/* Thick separator lines */
+.mondrian-divider-h {
+  height: var(--grid-line-width);
+  background: var(--mondrian-black);
+  width: 100%;
+}
+
+.mondrian-divider-v {
+  width: var(--grid-line-width);
+  background: var(--mondrian-black);
+  height: 100%;
 }
