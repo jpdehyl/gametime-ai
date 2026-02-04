@@ -1,183 +1,109 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Mic, 
-  Brain, 
-  BarChart3, 
-  Zap, 
-  Shield, 
-  Users,
-  Sparkles,
-  Clock
-} from "lucide-react";
+import Image from "next/image";
 
 const features = [
   {
-    icon: Mic,
-    title: "Real-Time Coaching",
-    description: "AI whispers guidance during live calls. Your reps know exactly what to say, when to say it.",
-    color: "blue",
-    size: "large",
+    title: "Smart Call Queue",
+    description: "AI-prioritized by fit score, urgency, research status",
+    screenshot: "/screenshots/dashboard-callqueue.jpg",
+    alt: "Smart Call Queue with AI-prioritized leads and fit scores",
+    accent: "red",
+    size: "large"
   },
   {
-    icon: Brain,
-    title: "Learns Your Playbook",
-    description: "Trains on your top performers. Unique to your sales motion.",
-    color: "yellow",
-    size: "small",
+    title: "AI Call Analysis",
+    description: "Every call scored across 7 dimensions",
+    screenshot: "/screenshots/call-analysis.jpg",
+    alt: "Call Analysis interface with performance scorecard and observations",
+    accent: "blue",
+    size: "medium"
   },
   {
-    icon: BarChart3,
-    title: "Instant Analytics",
-    description: "Every call scored. Every trend surfaced. No manual review needed.",
-    color: "red",
-    size: "small",
+    title: "SDR Leaderboard",
+    description: "Gamified performance tracking with badges",
+    screenshot: "/screenshots/dashboard-leaderboard.jpg",
+    alt: "SDR Leaderboard with action required items and monthly goals",
+    accent: "yellow",
+    size: "medium"
   },
   {
-    icon: Zap,
-    title: "5-Minute Setup",
-    description: "Connect your tools. Import your playbook. Start coaching. It's that simple.",
-    color: "white",
-    size: "medium",
+    title: "AI Reports Hub",
+    description: "Team oversight, disposition breakdown, coaching insights",
+    screenshot: "/screenshots/reports-hub.jpg",
+    alt: "AI Reports Hub showing team oversight and performance analytics",
+    accent: "blue",
+    size: "medium"
   },
   {
-    icon: Shield,
-    title: "Enterprise Security",
-    description: "SOC 2 Type II certified. GDPR compliant. Your data stays yours.",
-    color: "black",
-    size: "small",
+    title: "Team Management",
+    description: "Org structure, performance by rep, manager views",
+    screenshot: "/screenshots/team-directory.jpg",
+    alt: "Team Directory showing 3 Managers, 20 SDRs, and 5 AEs",
+    accent: "red",
+    size: "medium"
   },
   {
-    icon: Users,
-    title: "Team Insights",
-    description: "See who's improving. Identify coaching opportunities. Scale what works.",
-    color: "yellow",
-    size: "medium",
-  },
-  {
-    icon: Sparkles,
-    title: "AI Summaries",
-    description: "Automatic call notes. Action items extracted. CRM updated.",
-    color: "blue",
-    size: "small",
-  },
-  {
-    icon: Clock,
-    title: "24/7 Available",
-    description: "Never miss a coaching moment. Always on, always ready.",
-    color: "red",
-    size: "small",
-  },
+    title: "Manager Dashboard",
+    description: "KPIs, funnels, and trends at a glance",
+    screenshot: "/screenshots/manager-dashboard.jpg",
+    alt: "Manager Dashboard with KPIs, sales funnel, and activity charts",
+    accent: "yellow",
+    size: "medium"
+  }
 ];
-
-const colorClasses = {
-  blue: {
-    bg: "bg-[#0000FF]",
-    text: "text-white",
-    muted: "text-white/60",
-    iconBorder: "border-white/30",
-  },
-  yellow: {
-    bg: "bg-[#FFDE00]",
-    text: "text-black",
-    muted: "text-black/60",
-    iconBorder: "border-black/30",
-  },
-  red: {
-    bg: "bg-[#FF0000]",
-    text: "text-white",
-    muted: "text-white/60",
-    iconBorder: "border-white/30",
-  },
-  white: {
-    bg: "bg-white",
-    text: "text-black",
-    muted: "text-black/60",
-    iconBorder: "border-black/30",
-  },
-  black: {
-    bg: "bg-black",
-    text: "text-white",
-    muted: "text-white/50",
-    iconBorder: "border-white/30",
-  },
-};
 
 export function Features() {
   return (
-    <section id="features" className="border-b-[6px] border-black">
-      {/* Section header */}
-      <div className="grid grid-cols-12 border-b-[6px] border-black">
+    <section id="features" className="section-padding bg-background">
+      <div className="container">
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="col-span-12 lg:col-span-4 bg-black p-8 lg:p-12 border-b-[6px] lg:border-b-0 lg:border-r-[6px] border-black"
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-4xl mx-auto mb-16"
         >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 bg-[#00FF00]" />
-            <span className="text-white/50 text-xs uppercase tracking-widest">Capabilities</span>
-          </div>
-          <h2 className="mondrian-heading text-4xl lg:text-5xl text-white">
-            Built to Win
-          </h2>
+          <h2 className="heading-lg mb-6">Built for Sales Teams That Move Fast</h2>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="col-span-12 lg:col-span-8 bg-white p-8 lg:p-12 flex items-center"
-        >
-          <p className="text-xl lg:text-2xl text-black/70 max-w-2xl font-medium">
-            Every feature designed for one thing: helping your team close more deals, faster.
-          </p>
-        </motion.div>
-      </div>
 
-      {/* Features bento grid */}
-      <div className="grid grid-cols-6 lg:grid-cols-12">
-        {features.map((feature, index) => {
-          const colors = colorClasses[feature.color as keyof typeof colorClasses];
-          const Icon = feature.icon;
-          
-          const sizeClasses = {
-            small: "col-span-3 lg:col-span-3",
-            medium: "col-span-6 lg:col-span-4",
-            large: "col-span-6 lg:col-span-6",
-          };
-
-          return (
+        {/* Bento grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {features.map((feature, index) => (
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
-              className={`${sizeClasses[feature.size as keyof typeof sizeClasses]} ${colors.bg} border-b-[6px] border-r-[6px] border-black p-5 lg:p-6 min-h-[180px] lg:min-h-[220px] flex flex-col mondrian-cell cursor-pointer group`}
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className={`card-hover bg-card border border-border rounded-xl p-6 ${
+                feature.size === 'large' ? 'md:col-span-2 lg:col-span-2' : ''
+              }`}
             >
-              <div className={`w-10 h-10 lg:w-12 lg:h-12 border-2 ${colors.iconBorder} group-hover:border-current flex items-center justify-center mb-4 transition-colors`}>
-                <Icon className={`w-5 h-5 lg:w-6 lg:h-6 ${colors.muted} group-hover:opacity-100 transition-opacity`} />
+              {/* Accent line */}
+              <div className={`w-8 h-1 bg-accent-${feature.accent} mb-6`}></div>
+              
+              {/* Feature content */}
+              <div className="space-y-4 mb-6">
+                <h3 className="heading-md">{feature.title}</h3>
+                <p className="text-subtle">{feature.description}</p>
               </div>
-              
-              <h3 className={`mondrian-heading text-base lg:text-xl ${colors.text} mb-2`}>
-                {feature.title}
-              </h3>
-              
-              <p className={`${colors.muted} text-xs lg:text-sm leading-relaxed mt-auto`}>
-                {feature.description}
-              </p>
 
-              {feature.size === 'large' && (
-                <div className="mt-4 flex items-center gap-3">
-                  <div className={`px-3 py-1 border ${colors.iconBorder} ${colors.muted} text-xs font-bold uppercase group-hover:border-current transition-colors`}>
-                    Learn More
-                  </div>
-                </div>
-              )}
+              {/* Screenshot */}
+              <div className="bg-muted p-3 rounded-lg">
+                <Image
+                  src={feature.screenshot}
+                  alt={feature.alt}
+                  width={600}
+                  height={400}
+                  className="w-full h-auto rounded"
+                />
+              </div>
             </motion.div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </section>
   );

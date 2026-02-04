@@ -13,31 +13,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GameTime.ai | AI-Powered Sales Intelligence by GroundGame",
+  title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
   description:
-    "Transform your sales team with AI-powered coaching, real-time intelligence, and performance analytics. The AI layer that makes your humans work better.",
+    "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time. A product by GroundGame.",
   keywords: [
     "AI sales coaching",
     "sales intelligence",
     "BPO solutions",
-    "call coaching",
+    "call coaching", 
     "sales performance",
     "GroundGame",
+    "pre-call research",
+    "real-time coaching",
+    "sales AI",
   ],
   authors: [{ name: "GroundGame" }],
   openGraph: {
-    title: "GameTime.ai | AI-Powered Sales Intelligence",
+    title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
     description:
-      "Transform your sales team with AI-powered coaching and real-time intelligence.",
-    url: "https://gametime-ai-demo.vercel.app",
+      "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time.",
+    url: "https://gametime.ai",
     siteName: "GameTime.ai",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "GameTime.ai | AI-Powered Sales Intelligence",
+    title: "GameTime.ai | The AI Layer That Makes Sales Teams Unstoppable",
     description:
-      "Transform your sales team with AI-powered coaching and real-time intelligence.",
+      "From pre-call research to post-call coaching — GameTime gives every rep an AI copilot that knows your playbook, preps your calls, and coaches in real-time.",
   },
 };
 

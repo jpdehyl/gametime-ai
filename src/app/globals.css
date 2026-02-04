@@ -1,40 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Mondrian Color Palette - Pure, No Gradients */
+  /* Mondrian Color Palette - As accent colors on dark theme */
   --mondrian-red: #FF0000;
   --mondrian-yellow: #FFDE00;
   --mondrian-blue: #0000FF;
   --mondrian-black: #000000;
   --mondrian-white: #FFFFFF;
 
-  /* Semantic mappings */
-  --background: #FFFFFF;
-  --foreground: #000000;
+  /* Dark theme semantic mappings */
+  --background: #0a0a0a;
+  --foreground: #ffffff;
 
-  --primary: #0000FF;
-  --primary-foreground: #FFFFFF;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
 
-  --secondary: #FF0000;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #ffffff;
 
-  --accent: #FFDE00;
-  --accent-foreground: #000000;
+  --accent: #0000FF;
+  --accent-foreground: #ffffff;
 
-  /* Grid lines */
-  --grid-line: #000000;
-  --grid-line-width: 6px;
+  /* Grid lines - subtle on dark */
+  --grid-line: #333333;
+  --grid-line-width: 1px;
 
   /* Muted for subtle elements */
-  --muted: #F5F5F5;
-  --muted-foreground: #333333;
+  --muted: #1a1a1a;
+  --muted-foreground: #888888;
 
   /* Card */
-  --card: #FFFFFF;
-  --card-foreground: #000000;
+  --card: #111111;
+  --card-foreground: #ffffff;
 
   /* Border */
-  --border: #000000;
+  --border: #333333;
 }
 
 @theme inline {
@@ -77,18 +77,18 @@ body {
   line-height: 1.4;
 }
 
-/* Mondrian scrollbar */
+/* Dark scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--mondrian-white);
-  border-left: 2px solid var(--mondrian-black);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--mondrian-black);
+  background: #333333;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -101,15 +101,15 @@ body {
   color: var(--mondrian-black);
 }
 
-/* Mondrian Grid System */
-.mondrian-cell {
+/* Subtle card system inspired by factory.ai */
+.card-hover {
   position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.mondrian-cell:hover {
+.card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 4px 4px 0 var(--mondrian-black);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .mondrian-border {
@@ -158,35 +158,46 @@ body {
   color: var(--mondrian-white);
 }
 
-/* Typography - Geometric, Bold */
-.mondrian-heading {
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.9;
-}
-
-.mondrian-subheading {
+/* Typography - Clean, Spacious */
+.heading-xl {
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.75rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-size: clamp(2.5rem, 5vw, 4rem);
 }
 
-/* Hover effects for blocks */
-.mondrian-interactive {
+.heading-lg {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.heading-md {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.text-subtle {
+  color: var(--muted-foreground);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Subtle interactive elements */
+.interactive {
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
-.mondrian-interactive:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--mondrian-black);
+.interactive:hover {
+  opacity: 0.8;
 }
 
-.mondrian-interactive:active {
-  transform: translate(0, 0);
-  box-shadow: none;
+.interactive:active {
+  transform: scale(0.98);
 }
 
 /* Grid layout helpers */
@@ -272,6 +283,65 @@ h1, h2, h3 {
   text-wrap: balance;
 }
 
+/* Mondrian accent utilities */
+.accent-red {
+  color: var(--mondrian-red);
+}
+
+.accent-yellow {
+  color: var(--mondrian-yellow);
+}
+
+.accent-blue {
+  color: var(--mondrian-blue);
+}
+
+.border-accent-red {
+  border-color: var(--mondrian-red);
+}
+
+.border-accent-yellow {
+  border-color: var(--mondrian-yellow);
+}
+
+.border-accent-blue {
+  border-color: var(--mondrian-blue);
+}
+
+.bg-accent-red {
+  background-color: var(--mondrian-red);
+}
+
+.bg-accent-yellow {
+  background-color: var(--mondrian-yellow);
+}
+
+.bg-accent-blue {
+  background-color: var(--mondrian-blue);
+}
+
+/* Spacious sections like factory.ai */
+.section-padding {
+  padding: 6rem 0;
+}
+
+.section-padding-lg {
+  padding: 8rem 0;
+}
+
+/* Container with max width */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -283,7 +353,7 @@ h1, h2, h3 {
     scroll-behavior: auto !important;
   }
   
-  .mondrian-cell:hover {
+  .card-hover:hover {
     transform: none;
   }
 }
