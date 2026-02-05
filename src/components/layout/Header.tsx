@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
+const REQUEST_ACCESS_HREF = "mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access";
+
 const navLinks = [
   { href: "#platform", label: "Platform" },
-  { href: "#features", label: "Features" }, 
+  { href: "#features", label: "Features" },
   { href: "#about", label: "About" },
 ];
 
@@ -24,25 +26,37 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on Escape key
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape" && mobileMenuOpen) {
+      setMobileMenuOpen(false);
+    }
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md transition-all border-b border-border ${scrolled ? 'bg-background/98' : ''}`}>
       <div className="container">
-        <nav className="flex items-center justify-between h-16 lg:h-18">
+        <nav aria-label="Main navigation" className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex items-center gap-0.5">
-              <motion.div 
-                className="w-3 h-3 bg-accent-red" 
+              <motion.div
+                className="w-3 h-3 bg-accent-red"
                 whileHover={{ scale: 1.2 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               />
-              <motion.div 
-                className="w-3 h-3 bg-accent-yellow" 
+              <motion.div
+                className="w-3 h-3 bg-accent-yellow"
                 whileHover={{ scale: 1.2 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               />
-              <motion.div 
-                className="w-3 h-3 bg-accent-blue" 
+              <motion.div
+                className="w-3 h-3 bg-accent-blue"
                 whileHover={{ scale: 1.2 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               />
@@ -68,7 +82,7 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
+            <Button as="a" href={REQUEST_ACCESS_HREF}>
               Request Access
             </Button>
           </div>
@@ -77,7 +91,8 @@ export function Header() {
           <button
             className="lg:hidden w-10 h-10 flex items-center justify-center text-foreground hover:text-accent-blue transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -109,13 +124,13 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
-                <motion.div 
+                <motion.div
                   className="pt-4"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <Button className="w-full" onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
+                  <Button as="a" href={REQUEST_ACCESS_HREF} className="w-full">
                     Request Access
                   </Button>
                 </motion.div>

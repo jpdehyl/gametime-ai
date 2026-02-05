@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Container } from "@/components/ui/Container";
 
 export function About({ id }: { id?: string }) {
   return (
     <section id={id} className="section-padding bg-background">
-      <div className="container">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
+      <Container size="narrow">
+        <div className="text-center space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +41,7 @@ export function About({ id }: { id?: string }) {
             <span className="text-muted-foreground">A product by GroundGame</span>
           </motion.div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -2,6 +2,12 @@
 
 import { motion } from "framer-motion";
 
+const accentColors: Record<string, string> = {
+  red: "bg-accent-red",
+  yellow: "bg-accent-yellow",
+  blue: "bg-accent-blue",
+};
+
 const problems = [
   {
     text: "Reps spend 40% of their time on research instead of selling",
@@ -43,7 +49,7 @@ export function Problem() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="card-hover bg-card p-8 rounded-lg border border-border"
             >
-              <div className={`w-2 h-16 bg-accent-${problem.accent} mb-6 rounded`}></div>
+              <div className={`w-2 h-16 ${accentColors[problem.accent]} mb-6 rounded`}></div>
               <p className="text-lg leading-relaxed">
                 {problem.text}
               </p>

@@ -3,6 +3,12 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+const accentColors: Record<string, string> = {
+  red: "bg-accent-red",
+  yellow: "bg-accent-yellow",
+  blue: "bg-accent-blue",
+};
+
 const features = [
   {
     title: "Smart Call Queue",
@@ -83,7 +89,7 @@ export function Features() {
               }`}
             >
               {/* Accent line */}
-              <div className={`w-8 h-1 bg-accent-${feature.accent} mb-6`}></div>
+              <div className={`w-8 h-1 ${accentColors[feature.accent]} mb-6`}></div>
               
               {/* Feature content */}
               <div className="space-y-4 mb-6">

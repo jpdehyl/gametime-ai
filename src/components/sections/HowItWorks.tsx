@@ -3,6 +3,12 @@
 import { motion } from "framer-motion";
 import { Plug, Upload, Zap } from "lucide-react";
 
+const accentColors: Record<string, string> = {
+  red: "bg-accent-red",
+  yellow: "bg-accent-yellow",
+  blue: "bg-accent-blue",
+};
+
 const steps = [
   {
     number: "01",
@@ -59,7 +65,7 @@ export function HowItWorks() {
                   <div className="w-16 h-16 bg-card border border-border rounded-full flex items-center justify-center">
                     <step.icon className="w-6 h-6 text-foreground" />
                   </div>
-                  <div className={`absolute -top-2 -right-2 w-6 h-6 bg-accent-${step.accent} rounded-full flex items-center justify-center`}>
+                  <div className={`absolute -top-2 -right-2 w-6 h-6 ${accentColors[step.accent]} rounded-full flex items-center justify-center`}>
                     <span className="text-xs font-bold text-white">{step.number}</span>
                   </div>
                 </div>

@@ -18,7 +18,7 @@ export function Footer() {
           </div>
 
           {/* Links */}
-          <div className="flex flex-wrap items-center gap-6 md:gap-8">
+          <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-6 md:gap-8">
             <Link 
               href="#platform" 
               className="text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -49,7 +49,7 @@ export function Footer() {
             >
               Terms
             </Link>
-          </div>
+          </nav>
 
           {/* Copyright */}
           <p className="text-muted-foreground text-sm">

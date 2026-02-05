@@ -250,9 +250,13 @@ button, a, .mondrian-cell {
 }
 
 /* Better focus states */
-button:focus-visible, a:focus-visible {
+:focus-visible {
   outline: 3px solid var(--mondrian-blue);
   outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Loading shimmer effect */
