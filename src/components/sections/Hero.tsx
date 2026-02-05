@@ -87,7 +87,7 @@ export function Hero() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="flex flex-wrap gap-4 justify-center"
           >
-            <Button size="lg" className="group">
+            <Button size="lg" className="group" onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
               Request Access
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>

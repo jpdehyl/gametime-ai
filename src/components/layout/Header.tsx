@@ -68,7 +68,7 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button>
+            <Button onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
               Request Access
             </Button>
           </div>
@@ -115,7 +115,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
                     Request Access
                   </Button>
                 </motion.div>

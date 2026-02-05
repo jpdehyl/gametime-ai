@@ -32,7 +32,7 @@ export function CTA() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="space-y-4"
           >
-            <Button size="lg" className="group">
+            <Button size="lg" className="group" onClick={() => window.location.href = 'mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access'}>
               Request Early Access
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
@@ -40,10 +40,10 @@ export function CTA() {
             <p className="text-muted-foreground">
               or email{" "}
               <a 
-                href="mailto:hello@gametime.ai" 
+                href="mailto:main@dehyl.ca?subject=GameTime.ai%20-%20Request%20Access" 
                 className="text-accent-blue hover:underline"
               >
-                hello@gametime.ai
+                main@dehyl.ca
               </a>
             </p>
           </motion.div>
