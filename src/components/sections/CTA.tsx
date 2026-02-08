@@ -3,13 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
-
 export function CTA() {
   return (
     <section className="section-padding bg-background">
-      <Container size="narrow">
-        <div className="text-center space-y-8">
+      <div className="container">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -49,7 +47,7 @@ export function CTA() {
             </p>
           </motion.div>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

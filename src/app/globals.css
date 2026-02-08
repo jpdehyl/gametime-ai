@@ -60,11 +60,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+/* Reset handled by Tailwind CSS v4 base layer - do not duplicate here
+   as unlayered styles override @layer utilities in the CSS cascade */
 
 html {
   scroll-behavior: smooth;
